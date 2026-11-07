@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>夢喰通信|あなたの悩み、晴らします。</title>
+<meta name="description" content="ポケモンスリープで、あったらいいなと思うツールを募集しています。届いた声をもとに開発します。匿名で送れます。">
+<meta name="theme-color" content="#000000">
+<meta name="color-scheme" content="dark">
+<meta name="robots" content="noindex">
+
+<!-- ▼ 公開URL(ここの3か所は同じURLです。公開先が決まったら、このブロックだけ一括置換してください) -->
+<meta property="og:url" content="https://mgh2-ume91.github.io/nayami-box/">
+<meta property="og:image" content="https://mgh2-ume91.github.io/nayami-box/og.png">
+<meta name="twitter:image" content="https://mgh2-ume91.github.io/nayami-box/og.png">
+<!-- ▲ 公開URLここまで -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="夢喰通信|あなたの悩み、晴らします。">
+<meta property="og:description" content="ポケモンスリープで、あったらいいなと思うツールを募集しています。届いた声をもとに開発します。匿名で送れます。">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="夢喰通信|あなたの悩み、晴らします。">
+<meta name="twitter:description" content="ポケモンスリープで、あったらいいなと思うツールを募集しています。届いた声をもとに開発します。匿名で送れます。">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Cpath d='M16 5c2 5 3 8 3 11a3 3 0 0 1-6 0c0-3 1-6 3-11z' fill='%23ffe9a8'/%3E%3C/svg%3E">
+<script src="config.js"></script>
+<style>
+  :root {
+    --red: #c4281f;
+    --serif: "Yu Mincho", "YuMincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Noto Serif JP", "BIZ UDMincho", "MS PMincho", serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { background: #000; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    color: #fff;
+    font-family: var(--serif);
+    -webkit-text-size-adjust: 100%;
+    overflow-x: hidden;
+  }
+  main {
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+    padding: max(20px, env(safe-area-inset-top)) 16px max(28px, env(safe-area-inset-bottom));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ---- 蝋燭 ---- */
+  .candle-wrap { position: relative; width: 120px; height: 150px; }
+  .glow {
+    position: absolute; left: 50%; top: 31px;
+    width: 220px; height: 220px; margin: -110px 0 0 -110px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(170,28,18,.62) 0%, rgba(120,18,12,.34) 28%, rgba(60,8,6,.12) 52%, rgba(0,0,0,0) 70%);
+    pointer-events: none;
+    animation: glow 5s ease-in-out infinite;
+  }
+  .candle { position: relative; width: 120px; height: 150px; display: block; overflow: visible; }
+  .flame { transform-origin: 60px 74px; transform-box: view-box; animation: flicker 4.4s ease-in-out infinite; }
+  @keyframes flicker {
+    0%,100% { transform: scale(1,1) skewX(0); }
+    25% { transform: scale(.98,1.02) skewX(-1.4deg); }
+    50% { transform: scale(1.01,.99) skewX(.8deg); }
+    75% { transform: scale(.99,1.015) skewX(-.6deg); }
+  }
+  @keyframes glow { 0%,100% { opacity: .92; } 50% { opacity: 1; } 75% { opacity: .85; } }
+  /* 送信後に、炎がふっと揺れる */
+  .puff .flame { animation: puff 1.8s ease-in-out 1 both, flicker 4.4s ease-in-out 1.8s infinite; }
+  .puff .glow { animation: glowpuff 1.8s ease-in-out 1 both, glow 5s ease-in-out 1.8s infinite; }
+  @keyframes puff {
+    0% { transform: scale(1,1) skewX(0); }
+    25% { transform: scale(.6,.55) skewX(-14deg); }
+    50% { transform: scale(.8,.75) skewX(7deg); }
+    100% { transform: scale(1,1) skewX(0); }
+  }
+  @keyframes glowpuff { 0% { opacity: 1; } 25% { opacity: .4; } 100% { opacity: 1; } }
+
+  /* ---- 問いかけ ---- */
+  h1 {
+    margin: 16px 0 22px;
+    font-weight: 400;
+    font-size: 16px;
+    letter-spacing: .42em;
+    text-indent: .42em;
+    text-align: center;
+    line-height: 1.6;
+    white-space: nowrap;
+    color: #fff;
+  }
+
+  /* ---- フォーム ---- */
+  .form-area, form { width: 100%; display: flex; flex-direction: column; align-items: center; }
+  label.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  textarea, input[type=text] {
+    width: 100%;
+    max-width: 280px;
+    display: block;
+    background: #fff;
+    color: #000;
+    border: 0;
+    border-radius: 0;
+    font-family: var(--serif);
+    font-size: 16px; /* iOSの自動ズーム防止 */
+    line-height: 1.45;
+    padding: 4px 6px;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  textarea { height: 28px; max-height: 220px; resize: none; overflow: hidden; transition: height .35s ease; }
+  @media (prefers-reduced-motion: reduce) { textarea { transition: none; } }
+  textarea::placeholder, input::placeholder { color: #8a8a8a; }
+  textarea::placeholder { font-size: 12px; }
+  textarea:focus, input[type=text]:focus { outline: 1px solid #c4281f; outline-offset: 1px; }
+  .count { width: 100%; max-width: 280px; text-align: right; font-size: 10px; color: #777; margin-top: 2px; min-height: 12px; }
+
+  /* ハニーポット(人には見えない) */
+  .hp { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+
+  button {
+    margin-top: 16px;
+    padding: 3px 0;
+    width: 72px;
+    background: #000;
+    color: #fff;
+    border: 1px solid #fff;
+    border-radius: 0;
+    font-family: var(--serif);
+    font-size: 14px;
+    letter-spacing: .3em;
+    text-indent: .3em;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  button:hover:not(:disabled) { background: #222; }
+  button:focus-visible { outline: 1px solid var(--red); outline-offset: 2px; }
+  button:disabled { opacity: .45; cursor: default; }
+
+  .msg { margin: 12px 0 0; font-size: 12px; line-height: 1.7; text-align: center; color: var(--red); letter-spacing: .05em; }
+  .msg:empty { display: none; }
+
+  /* ---- 完了 ---- */
+  .done { display: none; width: 100%; text-align: center; margin-top: 2px; }
+  .done p { margin: 0; }
+  .done .big { font-size: 15px; letter-spacing: .4em; text-indent: .4em; }
+  .done .small { margin-top: 10px; font-size: 12px; line-height: 1.7; color: var(--red); letter-spacing: .08em; }
+  .sent .form-area { display: none; }
+  .sent .done { display: block; animation: fadein 1.6s ease both .5s; }
+  @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+
+  /* ---- 説明文 ---- */
+  .about { margin-top: 30px; width: 100%; text-align: center; font-size: 12px; line-height: 1.55; letter-spacing: .06em; }
+  .about h2 { margin: 0 0 10px; font-weight: 400; font-size: 14px; color: var(--red); letter-spacing: .4em; text-indent: .4em; }
+  .about p { margin: 0 0 10px; }
+  .about rt { font-size: 7px; letter-spacing: .15em; color: #8a2a24; }
+  .about .red { color: var(--red); }
+  .about .fine { margin-top: 14px; font-size: 10px; color: #777; letter-spacing: .08em; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .flame, .glow, .puff .flame, .puff .glow { animation: none !important; }
+    .sent .done { animation: none; }
+  }
+</style>
+</head>
+<body>
+<main id="app">
+  <div class="candle-wrap" id="candle" aria-hidden="true">
+    <div class="glow"></div>
+    <svg class="candle" viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="wax" x1="0" x2="1">
+          <stop offset="0" stop-color="#5d584d"/>
+          <stop offset=".22" stop-color="#cfc8b6"/>
+          <stop offset=".45" stop-color="#f6f2e7"/>
+          <stop offset=".75" stop-color="#bdb6a3"/>
+          <stop offset="1" stop-color="#4a463d"/>
+        </linearGradient>
+        <linearGradient id="waxshade" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#000" stop-opacity="0"/>
+          <stop offset=".7" stop-color="#000" stop-opacity=".05"/>
+          <stop offset="1" stop-color="#000" stop-opacity=".55"/>
+        </linearGradient>
+        <linearGradient id="dish" x1="0" x2="1">
+          <stop offset="0" stop-color="#1a1816"/>
+          <stop offset=".35" stop-color="#4b463e"/>
+          <stop offset=".6" stop-color="#2a2723"/>
+          <stop offset="1" stop-color="#0d0c0b"/>
+        </linearGradient>
+        <radialGradient id="fo" cx=".5" cy=".8" r=".75">
+          <stop offset="0" stop-color="#ffe9a6"/>
+          <stop offset=".4" stop-color="#ffb04a"/>
+          <stop offset=".8" stop-color="#d4421a"/>
+          <stop offset="1" stop-color="#7a1208"/>
+        </radialGradient>
+        <radialGradient id="fi" cx=".5" cy=".75" r=".7">
+          <stop offset="0" stop-color="#ffffff"/>
+          <stop offset=".6" stop-color="#fff7cf"/>
+          <stop offset="1" stop-color="#ffe083"/>
+        </radialGradient>
+        <radialGradient id="base" cx=".5" cy=".5" r=".5">
+          <stop offset="0" stop-color="#6a7cff" stop-opacity=".7"/>
+          <stop offset="1" stop-color="#6a7cff" stop-opacity="0"/>
+        </radialGradient>
+        <filter id="b1" x="-50%" y="-30%" width="200%" height="160%"><feGaussianBlur stdDeviation=".9"/></filter>
+        <filter id="b2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation=".4"/></filter>
+        <filter id="b3" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.6"/></filter>
+      </defs>
+
+      <!-- 受け皿 -->
+      <ellipse cx="60" cy="143" rx="30" ry="4" fill="#000" opacity=".7" filter="url(#b3)"/>
+      <path d="M33 136 Q33 141 60 142 Q87 141 87 136 Q87 132 60 131 Q33 132 33 136 Z" fill="url(#dish)"/>
+      <ellipse cx="60" cy="134.4" rx="27" ry="3.2" fill="#0a0908"/>
+      <ellipse cx="60" cy="133.6" rx="27" ry="3" fill="none" stroke="#6a645a" stroke-width=".6" opacity=".7"/>
+
+      <!-- 蝋 -->
+      <path d="M53 86 L53 133 Q53 135.5 60 135.5 Q67 135.5 67 133 L67 86 Z" fill="url(#wax)"/>
+      <path d="M53 86 L53 133 Q53 135.5 60 135.5 Q67 135.5 67 133 L67 86 Z" fill="url(#waxshade)"/>
+      <!-- 蝋だまり -->
+      <ellipse cx="60" cy="86" rx="7" ry="2.4" fill="#e9e3d2"/>
+      <ellipse cx="60" cy="86.2" rx="4.6" ry="1.4" fill="#fbf8ee"/>
+      <!-- 垂れ -->
+      <path d="M53 86 Q52.4 96 53.4 104 Q54.2 109 55.6 104 Q56.6 97 56.4 88 Z" fill="#f2eee0" opacity=".95"/>
+      <path d="M53.4 90 Q53.6 100 54.2 105" stroke="#fff" stroke-width=".6" fill="none" opacity=".7"/>
+      <path d="M63.5 87 Q63.8 94 64.3 99 Q65.4 102 66.4 98.5 Q67 93 66.6 87.5 Z" fill="#e6e0cf" opacity=".95"/>
+      <path d="M62 87 Q61.2 90 61.6 93 Q62.4 94.5 63 92.5 Q63.4 90 63 87 Z" fill="#f4f0e3" opacity=".8"/>
+      <!-- 皿に落ちた蝋 -->
+      <ellipse cx="72" cy="135" rx="5.5" ry="1.3" fill="#d9d3c1" opacity=".85"/>
+
+      <!-- 芯 -->
+      <path d="M60 86 Q59.6 80 60.4 75" stroke="#1d1814" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+      <circle cx="60.4" cy="75" r="1" fill="#ff7a2a"/>
+
+      <!-- 炎 -->
+      <g class="flame">
+        <ellipse cx="60" cy="68" rx="5" ry="6.5" fill="url(#base)"/>
+        <path d="M60 36 C 63 48 66.6 58 66.6 66 C 66.6 73 63.6 76 60 76 C 56.4 76 53.4 73 53.4 66 C 53.4 58 57 48 60 36 Z" fill="url(#fo)" filter="url(#b1)"/>
+        <path d="M60 50 C 62 58 64 63 64 68 C 64 72.6 62.2 74.6 60 74.6 C 57.8 74.6 56 72.6 56 68 C 56 63 58 58 60 50 Z" fill="url(#fi)" filter="url(#b2)"/>
+      </g>
+    </svg>
+  </div>
+
+  <h1>あなたの悩み、晴らします。</h1>
+
+  <div class="form-area">
+    <form id="form" autocomplete="off" novalidate>
+      <label class="sr" for="worry">あなたの悩み</label>
+      <textarea id="worry" name="worry" maxlength="1000" required rows="1"
+        placeholder="あったらいいなと思うツールを書いてください"></textarea>
+      <div class="count" id="count" aria-hidden="true"></div>
+
+      <!-- ハニーポット: 人は触らない欄。埋まっていたら送らない -->
+      <div class="hp" aria-hidden="true">
+        <label for="website">ウェブサイト(空のままにしてください)</label>
+        <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+      </div>
+
+      <button type="submit" id="send">送信</button>
+      <p class="msg" id="msg" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+
+  <div class="done" id="done" role="status">
+    <p class="big">受け取りました。</p>
+    <p class="small">開発の参考にします。ありがとうございます。</p>
+  </div>
+
+  <section class="about">
+    <h2><ruby>夢喰通信<rt>ゆめくいつうしん</rt></ruby></h2>
+    <p>ポケモンスリープで<br>「こんなツールがあったらいいのに」<br>と思うことを募集しています。<br>届いた声をもとに、私がツールを開発します。<br>名前は要りません。気軽にどうぞ。<br>返事がほしい方は、<br>XのIDも一緒に書いてください。</p>
+    <p class="red">すべては作れないかもしれません。<br>それでも、ひとつずつ読んでいます。</p>
+    <p class="fine">個人の非公式ツールです。<br>公式とは関係ありません。</p>
+  </section>
+</main>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var form = $('form'), worry = $('worry'), hp = $('website');
+  var btn = $('send'), msg = $('msg'), counter = $('count'), app = $('app'), candle = $('candle');
+  var busy = false;
+
+  function configured(c) {
+    return !!c && typeof c.FORM_ACTION === 'string' && /^https:\/\/docs\.google\.com\/forms\/.+\/formResponse$/.test(c.FORM_ACTION) &&
+      !/X{4,}/.test(c.FORM_ACTION) && /^entry\.\d+$/.test(c.ENTRY_WORRY || '') &&
+      !/^entry\.0+\d$/.test(c.ENTRY_WORRY);
+  }
+  // ローカル確認用: localhost のときだけ、ダミーの送信先(http)を許可
+  function allowedDummy(c) {
+    return !!c && /^(localhost|127\.0\.0\.1)$/.test(location.hostname) && /^http:\/\/(localhost|127\.0\.0\.1)[:/]/.test(c.FORM_ACTION || '') &&
+      /^entry\.\d+$/.test(c.ENTRY_WORRY || '');
+  }
+
+  var CLOSED = 28, OPEN = 120, MAXH = 220;
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function grow() {
+    var open = document.activeElement === worry || worry.value.length > 0;
+    var prev = worry.offsetHeight;
+    worry.style.transition = 'none';
+    worry.style.height = 'auto';
+    var need = worry.scrollHeight;
+    worry.style.height = prev + 'px';
+    void worry.offsetHeight;
+    worry.style.transition = '';
+    var target = open ? Math.min(Math.max(OPEN, need), MAXH) : CLOSED;
+    worry.style.height = target + 'px';
+    worry.style.overflowY = (open && need > MAXH) ? 'auto' : 'hidden';
+  }
+  worry.addEventListener('focus', function () {
+    grow();
+    // スマホでキーボードが出ても欄が隠れないように
+    setTimeout(function () { try { worry.scrollIntoView({ block: 'center', behavior: reduce ? 'auto' : 'smooth' }); } catch (_) {} }, 400);
+  });
+  worry.addEventListener('blur', grow);
+  worry.addEventListener('input', function () {
+    grow(); msg.textContent = '';
+    counter.textContent = worry.value.length > 800 ? worry.value.length + ' / 1000' : '';
+  });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (busy) return;
+    var text = worry.value.trim();
+    if (!text) { msg.textContent = 'ことばを、少しでも書いてください。'; worry.focus(); return; }
+
+    var cfg = window.NAYAMI_CONFIG;
+    if (!configured(cfg) && !allowedDummy(cfg)) {
+      msg.textContent = 'まだ送信先が用意できていません。しばらくしてから、もう一度お越しください。';
+      return;
+    }
+
+    busy = true; btn.disabled = true; msg.textContent = '';
+
+    // 隠し欄が埋まっている=人ではない。送らずに、成功したふりをする。
+    if (hp.value) { finish(); return; }
+    // 同じ端末からの連続送信を少し制限(30秒)
+    try {
+      var last = +localStorage.getItem('nayami_last') || 0;
+      if (Date.now() - last < 30000) {
+        msg.textContent = '少し間をおいてから、もう一度送ってください。';
+        busy = false; btn.disabled = false; return;
+      }
+    } catch (_) {}
+
+    var body = new URLSearchParams();
+    body.append(cfg.ENTRY_WORRY, text);
+
+    fetch(cfg.FORM_ACTION, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: body.toString()
+    }).then(function () {
+      try { localStorage.setItem('nayami_last', String(Date.now())); } catch (_) {}
+      finish();
+    }).catch(function () {
+      msg.textContent = '送れませんでした。電波のよいところで、もう一度お試しください。';
+      busy = false; btn.disabled = false;
+    });
+  });
+
+  function finish() {
+    worry.value = ''; counter.textContent = '';
+    candle.classList.add('puff');
+    app.classList.add('sent');
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }
+})();
+</script>
+</body>
+</html>
