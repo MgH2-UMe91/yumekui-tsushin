@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <radialGradient id="g" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#8a3ee0" stop-opacity=".7"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+    <linearGradient id="f" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#f1dcff"/><stop offset=".5" stop-color="#b47bff"/><stop offset="1" stop-color="#5b1fbf"/></linearGradient>
+    <linearGradient id="w" x1="0" x2="1"><stop offset="0" stop-color="#8c8676"/><stop offset=".3" stop-color="#e6dfcd"/><stop offset=".55" stop-color="#fbf7ec"/><stop offset="1" stop-color="#7d7768"/></linearGradient>
+  </defs>
+  <rect width="64" height="64" fill="#000"/>
+  <circle cx="32" cy="24" r="27" fill="url(#g)"/>
+  <path d="M32 5 C34.5 13 41 17.5 41 25 C41 30.5 37 33.5 32 33.5 C27 33.5 23 30.5 23 25 C23 20 26.5 17.5 27.8 12 C29.1 16.5 30.7 17.5 32 5Z" fill="url(#f)"/>
+  <path d="M32.5 16.5 C34.2 21.5 37.6 24 37.6 28 C37.6 31 35.4 32.5 32 32.5 C28.6 32.5 26.4 31 26.4 28.2 C26.4 24.5 30.2 22 32.5 16.5Z" fill="#f6ecff"/>
+  <path d="M13 34 L51 34 L44.7 62 L19.3 62Z" fill="url(#w)"/>
+  <ellipse cx="32" cy="34" rx="19" ry="3.6" fill="#fffaf0"/>
+  <path d="M15.5 34 Q15.6 43 18 47 Q20 48.3 20.2 43 L20 34Z" fill="#f4efe2"/>
+  <path d="M45 34 Q45.6 38.5 46.8 40.3 Q48 40.8 48.3 37.4 L48.4 34.6Z" fill="#f4efe2"/>
+</svg>

@@ -23,7 +23,8 @@
 <meta name="twitter:title" content="夢喰通信|あなたの悩み、晴らします。">
 <meta name="twitter:description" content="ポケモンスリープで、あったらいいなと思うツールを募集しています。届いた声をもとに開発します。匿名で送れます。">
 
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Cpath d='M16 5c2 5 3 8 3 11a3 3 0 0 1-6 0c0-3 1-6 3-11z' fill='%23ffe9a8'/%3E%3C/svg%3E">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <script src="config.js"></script>
 <script>
   // 演出: JSが動き、動きを減らす設定でないときだけ。本文を隠してから始める
@@ -179,6 +180,13 @@
   .about p { margin: 0 0 10px; }
   .about rt { font-size: 7px; letter-spacing: .15em; color: #8a2a24; }
   .about .red { color: var(--red); }
+  .tools { margin: 22px auto 0; width: 100%; max-width: 260px; }
+  .tools h3 { margin: 0 0 6px; font-weight: 400; font-size: 13px; color: var(--red); letter-spacing: .3em; text-indent: .3em; }
+  .tools a { display: block; text-align: left; color: #eee; text-decoration: none; border-top: 1px solid #333; padding: 7px 4px; }
+  .tools a:last-child { border-bottom: 1px solid #333; }
+  .tools a:hover, .tools a:focus-visible { background: #111; outline: none; }
+  .tools a span { float: right; color: #777; }
+  .tools small { display: block; color: #888; font-size: 10px; letter-spacing: .04em; margin-top: 1px; }
   .about .fine { margin-top: 14px; font-size: 10px; color: #777; letter-spacing: .08em; }
 
   /* ---- 入口の演出: おにびが燃えて消える → 本文がフェードイン ---- */
@@ -370,6 +378,11 @@
     <h2><ruby>夢喰通信<rt>ゆめくいつうしん</rt></ruby></h2>
     <p>ポケモンスリープで<br>「こんなツールがあったらいいのに」<br>と思うことを募集しています。<br>届いた声をもとに、<br>ゆめくいがツールを開発します。<br>名前は要りません。気軽にどうぞ。</p>
     <p class="red">すべては作れないかもしれません。<br>お便りはすべて読みます。</p>
+    <nav class="tools" aria-label="夢喰のひみつ道具">
+      <h3>夢喰のひみつ道具</h3>
+      <a href="https://mgh2-ume91.github.io/sleep-type-tool/" target="_blank" rel="noopener">睡眠タイプ予報<span>›</span><small>睡眠タイプを記録して、平均を出す</small></a>
+      <a href="https://mgh2-ume91.github.io/pksl-iv-importer/" target="_blank" rel="noopener">IV Importer<span>›</span><small>詳細画面のスクショを、個体値計算機に取り込む</small></a>
+    </nav>
     <p class="fine">※個人の非公式ツールで、公式とは関係ありません。<br>※送信内容はGoogleフォームで受け取ります。</p>
   </section>
 </main>
