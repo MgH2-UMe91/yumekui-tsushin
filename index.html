@@ -120,6 +120,15 @@
   textarea:focus, input[type=text]:focus { outline: 1px solid #c4281f; outline-offset: 1px; }
   .count { width: 100%; max-width: 280px; text-align: right; font-size: 10px; color: #777; margin-top: 2px; min-height: 12px; }
 
+  /* 書き始めてから出てくる欄 */
+  .extra { width: 100%; max-width: 280px; max-height: 0; opacity: 0; overflow: hidden; visibility: hidden;
+    transition: max-height .4s ease, opacity .5s ease .1s, visibility 0s linear .5s; }
+  .extra.show { max-height: 120px; opacity: 1; visibility: visible; transition: max-height .4s ease, opacity .5s ease .1s; }
+  .extra input[type=text] { height: 28px; padding: 4px 6px; margin-top: 4px; }
+  .extra input::placeholder { font-size: 12px; }
+  .extra .hint { margin: 6px 0 0; font-size: 10px; line-height: 1.6; color: #8a8a8a; text-align: center; letter-spacing: .06em; }
+  @media (prefers-reduced-motion: reduce) { .extra, .extra.show { transition: none; } }
+
   /* ハニーポット(人には見えない) */
   .hp { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
 
@@ -255,6 +264,13 @@
         placeholder="あったらいいなと思うツールを書いてください"></textarea>
       <div class="count" id="count" aria-hidden="true"></div>
 
+      <div class="extra" id="extra">
+        <label class="sr" for="xid">XのID(任意)</label>
+        <input type="text" id="xid" name="xid" maxlength="30" inputmode="email" autocapitalize="off" spellcheck="false"
+          placeholder="XのID(返事がほしい方だけ)" tabindex="-1">
+        <p class="hint">画像を見せたい方は、XのDMで送ってください。</p>
+      </div>
+
       <!-- ハニーポット: 人は触らない欄。埋まっていたら送らない -->
       <div class="hp" aria-hidden="true">
         <label for="website">ウェブサイト(空のままにしてください)</label>
@@ -273,16 +289,16 @@
 
   <section class="about">
     <h2><ruby>夢喰通信<rt>ゆめくいつうしん</rt></ruby></h2>
-    <p>ポケモンスリープで<br>「こんなツールがあったらいいのに」<br>と思うことを募集しています。<br>届いた声をもとに、<br>ゆめくいがツールを開発します。<br>名前は要りません。気軽にどうぞ。<br>返事がほしい方は、<br>XのIDも一緒に書いてください。</p>
-    <p class="red">すべては作れないかもしれません。<br>作らないかもしれません。<br>お便りはすべて読みます。</p>
-    <p class="fine">※個人の非公式ツールです。<br>※公式とは関係ありません。</p>
+    <p>ポケモンスリープで<br>「こんなツールがあったらいいのに」<br>と思うことを募集しています。<br>届いた声をもとに、<br>ゆめくいがツールを開発します。<br>名前は要りません。気軽にどうぞ。</p>
+    <p class="red">すべては作れないかもしれません。<br>お便りはすべて読みます。</p>
+    <p class="fine">※個人の非公式ツールで、公式とは関係ありません。<br>※送信内容はGoogleフォームで受け取ります。</p>
   </section>
 </main>
 
 <script>
 (function () {
   var $ = function (id) { return document.getElementById(id); };
-  var form = $('form'), worry = $('worry'), hp = $('website');
+  var form = $('form'), worry = $('worry'), hp = $('website'), xid = $('xid'), extra = $('extra');
   var btn = $('send'), msg = $('msg'), counter = $('count'), app = $('app'), candle = $('candle');
   var busy = false;
 
@@ -312,8 +328,13 @@
     worry.style.height = target + 'px';
     worry.style.overflowY = (open && need > MAXH) ? 'auto' : 'hidden';
   }
+  // 悩みの欄を一度さわったら、XのID欄を出す(出したら閉じない)
+  function reveal() {
+    if (extra.classList.contains('show')) return;
+    extra.classList.add('show'); xid.tabIndex = 0;
+  }
   worry.addEventListener('focus', function () {
-    grow();
+    grow(); reveal();
     // スマホでキーボードが出ても欄が隠れないように
     setTimeout(function () { try { worry.scrollIntoView({ block: 'center', behavior: reduce ? 'auto' : 'smooth' }); } catch (_) {} }, 400);
   });
@@ -350,6 +371,8 @@
 
     var body = new URLSearchParams();
     body.append(cfg.ENTRY_WORRY, text);
+    var id = xid.value.trim();
+    if (id && /^entry\.\d+$/.test(cfg.ENTRY_XID || '')) body.append(cfg.ENTRY_XID, id);
 
     fetch(cfg.FORM_ACTION, {
       method: 'POST',
@@ -366,7 +389,7 @@
   });
 
   function finish() {
-    worry.value = ''; counter.textContent = '';
+    worry.value = ''; xid.value = ''; counter.textContent = '';
     candle.classList.add('puff');
     app.classList.add('sent');
     window.scrollTo({ top: 0, behavior: 'auto' });
