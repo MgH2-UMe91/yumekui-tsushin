@@ -28,12 +28,28 @@
 <meta name="apple-mobile-web-app-title" content="夢喰通信">
 <meta name="application-name" content="夢喰通信">
 <script src="config.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;800&display=swap">
 <script>
-  // 演出: JSが動き、動きを減らす設定でないときだけ。本文を隠してから始める
+  // 着せ替え: 見る人の端末の時計で 0:00〜3:59 は「夜」(怖い版)、それ以外は「POP」(ゆめくい通信)
+  // 確認用に ?theme=night / ?theme=pop で切り替えられる
   (function () {
+    var root = document.documentElement, theme;
+    try {
+      var q = (location.search.match(/[?&]theme=(night|pop)\b/) || [])[1];
+      theme = q || (new Date().getHours() < 4 ? 'night' : 'pop');
+    } catch (_) { theme = 'night'; }
+    root.className += ' ' + theme;
+    if (theme === 'pop') {
+      document.title = 'ゆめくい通信|あったらいいな、募集中';
+      var m = document.querySelector('meta[name=theme-color]'); if (m) m.content = '#1a1040';
+      return;
+    }
+    // 夜の演出: 動きを減らす設定でないときだけ。本文を隠してから始める
     try {
       if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      document.documentElement.className += ' intro';
+      root.className += ' intro';
     } catch (_) {}
   })();
 </script>
@@ -238,6 +254,50 @@
     .flame, .glow, .puff .flame, .puff .glow { animation: none !important; }
     .sent .done { animation: none; }
   }
+
+  /* ================= 着せ替え ================= */
+  html:not(.pop) .p { display: none !important; }
+  .pop .n { display: none !important; }
+  #sky { display: none; }
+
+  /* ---- POP(ゆめくい通信) ---- */
+  .pop, .pop body { background: #140c33; }
+  .pop body { font-family: "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", "BIZ UDPGothic", "Meiryo", sans-serif; }
+  .pop #sky { display: block; position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+  .pop main { position: relative; z-index: 1; max-width: 340px; }
+  .pop-head { text-align: center; margin: 36px 0 22px; }
+  .pop-head .ttl { margin: 0; font-size: 34px; font-weight: 800; letter-spacing: .06em; line-height: 1.2; color: #fff;
+    text-shadow: 0 0 12px rgba(255,138,216,.75), 0 0 28px rgba(143,107,255,.6); white-space: nowrap; }
+  .pop-head .ttl .st { color: #ffe27a; font-size: 18px; vertical-align: 14px; margin: 0 4px; text-shadow: 0 0 10px rgba(255,226,122,.9); }
+  .pop-head .sub { margin: 10px 0 0; font-size: 13px; line-height: 1.7; color: #f3e9ff; letter-spacing: .04em; }
+  .pop textarea, .pop input[type=text] { font-family: inherit; border-radius: 16px; padding: 10px 14px; max-width: 300px; background: rgba(255,255,255,.96);
+    box-shadow: 0 4px 18px rgba(20,8,60,.45); }
+  .pop textarea::placeholder { font-size: 12px; }
+  .pop textarea:focus, .pop input[type=text]:focus { outline: 2px solid #ff8ad8; outline-offset: 2px; }
+  .pop .count { max-width: 300px; color: #cdbcf5; }
+  .pop .extra { max-width: 300px; }
+  .pop .extra input[type=text] { height: 40px; border-radius: 12px; margin-top: 6px; }
+  .pop .extra .hint { color: #d9c9ff; font-size: 11px; }
+  .pop button { width: 150px; margin-top: 18px; padding: 10px 0; border: 0; border-radius: 999px; font-family: inherit; font-weight: 800; font-size: 15px;
+    letter-spacing: .25em; text-indent: .25em; color: #fff; background: linear-gradient(90deg, #ff7ac6, #8f6bff);
+    box-shadow: 0 6px 20px rgba(255,122,198,.35); }
+  .pop button:hover:not(:disabled) { background: linear-gradient(90deg, #ff8fd0, #a183ff); }
+  .pop button:focus-visible { outline: 2px solid #ffe27a; }
+  .pop .msg { color: #ffb3e2; }
+  .pop .done .big { font-size: 22px; font-weight: 800; letter-spacing: .12em; text-indent: .12em; text-shadow: 0 0 12px rgba(255,138,216,.7); }
+  .pop .done .small { color: #ffe27a; font-size: 13px; }
+  .pop .about { margin-top: 30px; padding: 20px 16px 16px; border-radius: 22px; background: rgba(22,12,58,.55);
+    border: 1px solid rgba(255,255,255,.14); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); font-size: 13px; line-height: 1.7; letter-spacing: .03em; }
+  .pop .about h2 { font-size: 18px; font-weight: 800; color: #ffe27a; letter-spacing: .12em; text-indent: .12em; }
+  .pop .about .red { color: #ff9ad5; }
+  .pop .tools { max-width: 280px; }
+  .pop .tools h3 { color: #ffe27a; font-weight: 800; letter-spacing: .12em; text-indent: .12em; font-size: 14px; margin-bottom: 8px; }
+  .pop .tools a { border: 0; border-radius: 14px; background: rgba(255,255,255,.09); margin: 8px 0; padding: 10px 14px; }
+  .pop .tools a:last-child { border: 0; }
+  .pop .tools a:hover, .pop .tools a:focus-visible { background: rgba(255,255,255,.17); }
+  .pop .tools a span { color: #ff9ad5; }
+  .pop .tools small { color: #cdbcf5; font-size: 11px; }
+  .pop .about .fine { color: #a996d8; }
 </style>
 </head>
 <body>
@@ -268,8 +328,13 @@
     </svg>
   </div>
 </div>
+<canvas id="sky" aria-hidden="true"></canvas>
 <main id="app">
-  <div class="candle-wrap" id="candle" aria-hidden="true">
+  <header class="pop-head p">
+    <p class="ttl"><span class="st" aria-hidden="true">✦</span>ゆめくい通信<span class="st" aria-hidden="true">✦</span></p>
+    <p class="sub">ポケモンスリープの<br>「あったらいいな」、聞かせてね。</p>
+  </header>
+  <div class="candle-wrap n" id="candle" aria-hidden="true">
     <div class="glow"></div>
     <svg class="candle" viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -344,7 +409,7 @@
     </svg>
   </div>
 
-  <h1>あなたの悩み、晴らします。</h1>
+  <h1 class="n">あなたの悩み、晴らします。</h1>
 
   <div class="form-area">
     <form id="form" autocomplete="off" novalidate>
@@ -372,12 +437,15 @@
   </div>
 
   <div class="done" id="done" role="status">
-    <p class="big">受け取りました。</p>
-    <p class="small">開発の参考にします。ありがとうございます。</p>
+    <p class="big n">受け取りました。</p>
+    <p class="small n">開発の参考にします。ありがとうございます。</p>
+    <p class="big p">とどいたよ!</p>
+    <p class="small p">ありがとう。開発のヒントにします。</p>
   </div>
 
   <section class="about">
-    <h2><ruby>夢喰通信<rt>ゆめくいつうしん</rt></ruby></h2>
+    <h2 class="n"><ruby>夢喰通信<rt>ゆめくいつうしん</rt></ruby></h2>
+    <h2 class="p">ゆめくい通信</h2>
     <p>ポケモンスリープで<br>「こんなツールがあったらいいのに」<br>と思うことを募集しています。<br>届いた声をもとに、<br>ゆめくいがツールを開発します。<br>名前は要りません。気軽にどうぞ。</p>
     <p class="red">すべては作れないかもしれません。<br>お便りはすべて読みます。</p>
     <nav class="tools" aria-label="夢喰のひみつ道具">
@@ -390,6 +458,67 @@
 </main>
 
 <script>
+// POP版の星空: 紫の夜空、天の川の帯、星、遠くの山なみ。一部の星はまたたく
+(function () {
+  if (!/\bpop\b/.test(document.documentElement.className)) return;
+  var cv = document.getElementById('sky'), cx = cv.getContext && cv.getContext('2d');
+  if (!cx) return;
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var W, H, dpr, base, twinkles = [];
+  function rnd(a, b) { return a + Math.random() * (b - a); }
+  function draw() {
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    W = innerWidth; H = innerHeight;
+    cv.width = W * dpr; cv.height = H * dpr;
+    var b = document.createElement('canvas'); b.width = cv.width; b.height = cv.height;
+    var g = b.getContext('2d'); g.scale(dpr, dpr);
+    var sky = g.createLinearGradient(0, 0, 0, H);
+    sky.addColorStop(0, '#120a30'); sky.addColorStop(.45, '#2a1c66'); sky.addColorStop(.8, '#5a3fa6'); sky.addColorStop(1, '#8a64c8');
+    g.fillStyle = sky; g.fillRect(0, 0, W, H);
+    var ang = -1.05, cxm = W * .5, cym = H * .38, L = Math.hypot(W, H);
+    for (var i = 0; i < 40; i++) {
+      var t = rnd(-.5, .5), px = cxm + Math.cos(ang) * t * L, py = cym + Math.sin(ang) * t * L, r = rnd(60, 140);
+      var rg = g.createRadialGradient(px, py, 0, px, py, r);
+      rg.addColorStop(0, 'rgba(215,185,255,.14)'); rg.addColorStop(1, 'rgba(210,180,255,0)');
+      g.fillStyle = rg; g.fillRect(px - r, py - r, r * 2, r * 2);
+    }
+    var n = Math.round(W * H / 380);
+    for (var k = 0; k < n; k++) {
+      var x, y;
+      if (k % 2) { var tt = rnd(-.5, .5), off = rnd(-1, 1) * rnd(0, 1) * 110; x = cxm + Math.cos(ang) * tt * L - Math.sin(ang) * off; y = cym + Math.sin(ang) * tt * L + Math.cos(ang) * off; }
+      else { x = rnd(0, W); y = rnd(0, H * .9); }
+      g.fillStyle = 'rgba(255,255,255,' + rnd(.2, .9).toFixed(2) + ')';
+      var sz = Math.random() < .06 ? rnd(1.4, 2) : rnd(.5, 1.2); g.fillRect(x, y, sz, sz);
+    }
+    twinkles = [];
+    for (var j = 0; j < 34; j++) twinkles.push({ x: rnd(0, W), y: rnd(0, H * .8), r: rnd(1, 2.2), p: rnd(0, 6.28), s: rnd(.6, 1.6) });
+    var hz = g.createLinearGradient(0, H * .8, 0, H);
+    hz.addColorStop(0, 'rgba(255,170,230,0)'); hz.addColorStop(1, 'rgba(255,170,230,.28)');
+    g.fillStyle = hz; g.fillRect(0, H * .8, W, H * .2);
+    g.fillStyle = 'rgba(40,26,84,.92)'; g.beginPath(); g.moveTo(0, H);
+    for (var m = 0; m <= 60; m++) { var mx = W * m / 60, u = m / 60 * 6.28; g.lineTo(mx, H * .9 - Math.sin(u * 1.3 + .4) * 12 - Math.sin(u * 3.1) * 5 - Math.max(0, Math.sin(u * .8 - .6)) * 16); }
+    g.lineTo(W, H); g.fill();
+    g.fillStyle = '#120b26'; g.beginPath(); g.moveTo(0, H);
+    for (var q = 0; q <= 80; q++) { var qx = W * q / 80; g.lineTo(qx, H * .95 - Math.abs(Math.sin(q * .55)) * 7 - Math.random() * 3); }
+    g.lineTo(W, H); g.fill();
+    base = b;
+  }
+  function frame(now) {
+    cx.setTransform(1, 0, 0, 1, 0, 0); cx.drawImage(base, 0, 0);
+    cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    for (var i = 0; i < twinkles.length; i++) {
+      var s = twinkles[i], a = reduce ? .8 : .45 + .55 * Math.sin(now / 1000 * s.s + s.p);
+      a = Math.max(0, a);
+      cx.fillStyle = 'rgba(255,248,220,' + a.toFixed(2) + ')';
+      cx.beginPath(); cx.arc(s.x, s.y, s.r, 0, 6.29); cx.fill();
+      cx.fillStyle = 'rgba(255,248,220,' + (a * .35).toFixed(2) + ')';
+      cx.fillRect(s.x - s.r * 3, s.y - .4, s.r * 6, .8); cx.fillRect(s.x - .4, s.y - s.r * 3, .8, s.r * 6);
+    }
+    if (!reduce) requestAnimationFrame(frame);
+  }
+  draw(); frame(0); if (!reduce) requestAnimationFrame(frame);
+  var rt; addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { draw(); if (reduce) frame(0); }, 200); });
+})();
 // 入口の演出: ノイズ約1秒 → おにび(0.7秒から約2.6秒) → 本文が1秒でフェードイン。タップで飛ばせる
 (function () {
   var root = document.documentElement;
@@ -442,7 +571,8 @@
       /^entry\.\d+$/.test(c.ENTRY_WORRY || '');
   }
 
-  var CLOSED = 28, OPEN = 120, MAXH = 220;
+  var POP = /\bpop\b/.test(document.documentElement.className);
+  var CLOSED = POP ? 44 : 28, OPEN = 120, MAXH = 220;
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   function grow() {
     var open = document.activeElement === worry || worry.value.length > 0;
